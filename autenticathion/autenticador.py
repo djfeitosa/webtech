@@ -1,5 +1,4 @@
 import flet as ft
-from flet import Colors
 
 
 def main(page: ft.Page):
@@ -7,6 +6,20 @@ def main(page: ft.Page):
     page.vertical_alignment = "center"
     page.window.maximizable = True
     page.window.resizable = False
+
+    def on_over_sigin(e):
+        e.control.bgcolor = ft.Colors.GREEN_200
+        e.control.update()
+
+    def logar(e):
+        page.remove(register)
+        page.add(login)
+        page.update()
+
+    def register(e):
+        page.remove(login)
+        page.add(register)
+        page.update()
 
     login = ft.Column(
         [
@@ -61,8 +74,8 @@ def main(page: ft.Page):
                                             ),
                                             ft.ElevatedButton(
                                                 text="Sign-in",
-                                                bgcolor=Colors.GREEN_100,
-                                                on_hover=Colors.GREEN_200,
+                                                bgcolor=ft.Colors.GREEN_100,
+                                                on_hover=on_over_sigin,
                                                 width=300,
                                                 height=40,
                                             ),
@@ -71,7 +84,10 @@ def main(page: ft.Page):
                                                     ft.TextButton(
                                                         "Recuperar sua senha"
                                                     ),
-                                                    ft.TextButton("Criar nova conta"),
+                                                    ft.TextButton(
+                                                        "Criar nova conta",
+                                                        on_click=register,
+                                                    ),
                                                 ],
                                                 width=300,
                                                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
@@ -98,11 +114,141 @@ def main(page: ft.Page):
             )
         ]
     )
+    register = ft.Column(
+        [
+            ft.Container(
+                bgcolor=ft.Colors.GREEN_200,
+                width=page.window.width - 10,
+                height=page.window.height - 60,
+                border_radius=10,
+                content=ft.Column(
+                    [
+                        ft.Container(
+                            bgcolor=ft.Colors.WHITE70,
+                            width=400,
+                            height=450,
+                            border_radius=10,
+                            content=ft.Column(
+                                [
+                                    ft.Container(
+                                        padding=ft.padding.only(top=10, bottom=12),
+                                        content=ft.Column(
+                                            [
+                                                ft.Text(
+                                                    value="Register",
+                                                    weight=ft.FontWeight.BOLD,
+                                                    size=20,
+                                                )
+                                            ]
+                                        ),
+                                    ),
+                                    ft.Column(
+                                        [
+                                            ft.TextField(
+                                                autofocus=True,
+                                                hint_text="Primeiro nome",
+                                                width=300,
+                                                height=40,
+                                                border_radius=ft.border_radius.all(40),
+                                                prefix_icon=ft.Icons.PERSON,
+                                                keyboard_type=ft.KeyboardType.NAME,
+                                                text_vertical_align=1,
+                                            ),
+                                            ft.TextField(
+                                                hint_text="Segundo nome",
+                                                width=300,
+                                                height=40,
+                                                border_radius=ft.border_radius.all(40),
+                                                prefix_icon=ft.Icons.PERSON,
+                                                keyboard_type=ft.KeyboardType.NAME,
+                                                text_vertical_align=1,
+                                            ),
+                                            ft.TextField(
+                                                hint_text="Digite seu e-mail",
+                                                width=300,
+                                                height=40,
+                                                border_radius=ft.border_radius.all(40),
+                                                prefix_icon=ft.Icons.EMAIL,
+                                                keyboard_type=ft.KeyboardType.EMAIL,
+                                                text_vertical_align=1,
+                                            ),
+                                            ft.TextField(
+                                                hint_text="Digite seu telefone",
+                                                width=300,
+                                                height=40,
+                                                border_radius=ft.border_radius.all(40),
+                                                prefix_icon=ft.Icons.PHONE,
+                                                keyboard_type=ft.KeyboardType.PHONE,
+                                                text_vertical_align=1,
+                                            ),
+                                            ft.TextField(
+                                                hint_text="Digite sua senha",
+                                                width=300,
+                                                height=40,
+                                                border_radius=ft.border_radius.all(40),
+                                                prefix_icon=ft.Icons.LOCK,
+                                                keyboard_type=ft.KeyboardType.VISIBLE_PASSWORD,
+                                                password=True,
+                                                text_vertical_align=1,
+                                            ),
+                                            ft.TextField(
+                                                hint_text="Confirme sua senha",
+                                                width=300,
+                                                height=40,
+                                                border_radius=ft.border_radius.all(40),
+                                                prefix_icon=ft.Icons.LOCK,
+                                                keyboard_type=ft.KeyboardType.VISIBLE_PASSWORD,
+                                                password=True,
+                                                text_vertical_align=1,
+                                            ),
+                                            ft.ElevatedButton(
+                                                text="Register",
+                                                bgcolor=ft.Colors.GREEN_100,
+                                                on_hover=on_over_sigin,
+                                                width=300,
+                                                height=40,
+                                            ),
+                                            ft.Row(
+                                                [
+                                                    ft.TextButton(
+                                                        "Recuperar sua senha"
+                                                    ),
+                                                    ft.TextButton(
+                                                        "Já tenho uma conta",
+                                                        on_click=logar,
+                                                    ),
+                                                ],
+                                                width=300,
+                                                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                                            ),
+                                        ],
+                                        spacing=8,
+                                    ),
+                                ],
+                                horizontal_alignment="center",
+                            ),
+                        )
+                    ],
+                    horizontal_alignment="center",
+                    alignment="center",
+                ),
+            )
+        ]
+    )
 
-    register = ft.Column([])
+    def resize_controls(e):
+        login.controls[0].width = page.window_width - 10
+        login.controls[0].height = page.window_height - 60
+
+        register.controls[0].width = page.window_width - 10
+        register.controls[0].height = page.window_height - 60
+
+        page.update()
+
+    page.on_resize = resize_controls
 
     page.add(login)
 
 
 if __name__ == "__main__":
-    ft.app(target=main, view=ft.WEB_BROWSER)
+    ft.app(target=main)
