@@ -7,10 +7,6 @@ def main(page: ft.Page):
     page.window.maximizable = True
     page.window.resizable = False
 
-    def on_over_sigin(e):
-        e.control.bgcolor = ft.Colors.GREEN_200
-        e.control.update()
-
     def logar(e):
         page.remove(register)
         page.add(login)
@@ -20,6 +16,38 @@ def main(page: ft.Page):
         page.remove(login)
         page.add(register)
         page.update()
+
+    def open_msgbox(e):
+        page.dialog = MsgBox
+        MsgBox.open = True
+        page.update()
+
+    def close_msgbox(e):
+        MsgBox.open = False
+        page.update()
+
+    MsgBox = ft.AlertDialog(
+        content=ft.Container(
+            width=260,
+            height=30,
+            content=ft.Column(
+                [
+                    ft.Row(
+                        [
+                            ft.Icon(ft.icons.CANCEL, size=30, color=ft.Colors.RED),
+                            ft.Text(
+                                value="Email ou senha incorretos",
+                                size=16,
+                                weight=ft.FontWeight.BOLD,
+                            ),
+                        ],
+                        spacing=5,
+                    )
+                ]
+            ),
+        ),
+        actions=[ft.TextButton(text="OK", on_click=close_msgbox)],
+    )
 
     login = ft.Column(
         [
@@ -75,9 +103,13 @@ def main(page: ft.Page):
                                             ft.ElevatedButton(
                                                 text="Sign-in",
                                                 bgcolor=ft.Colors.GREEN_100,
-                                                on_hover=on_over_sigin,
+                                                # on_hover=on_over_sigin,
                                                 width=300,
                                                 height=40,
+                                                style=ft.ButtonStyle(
+                                                    overlay_color=ft.Colors.GREEN_200
+                                                ),
+                                                on_click=open_msgbox,
                                             ),
                                             ft.Row(
                                                 [
@@ -204,7 +236,9 @@ def main(page: ft.Page):
                                             ft.ElevatedButton(
                                                 text="Register",
                                                 bgcolor=ft.Colors.GREEN_100,
-                                                on_hover=on_over_sigin,
+                                                style=ft.ButtonStyle(
+                                                    overlay_color=ft.Colors.GREEN_200
+                                                ),
                                                 width=300,
                                                 height=40,
                                             ),
